@@ -12,7 +12,7 @@ import {Input} from "@/components/ui/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {Button} from "@/components/ui/button";
-//import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import {
     Form,
     FormControl,
@@ -134,22 +134,22 @@ export const SignInView=()=>{
                                 </div>
                                                                 <div className='grid grid-cols-2 gap-4'>
                                     <Button
-                                       // onClick={() => onSocial("google")}
+                                       onClick={() => authClient.signIn.social({provider:"google",})}
                                         disabled={pending}
                                         variant='outline'
                                         type='button'
                                         className='w-full'
                                     >
-                                        FaGoogle 
+                                        <FaGoogle/> 
                                     </Button>
                                     <Button
-                                       // onClick={() => onSocial("github")}
+                                        onClick={() => authClient.signIn.social({provider:"github",})}
                                         disabled={pending}
                                         variant='outline'
                                         type='button'
                                         className='w-full'
                                     >
-                                        FaGithub 
+                                        <FaGithub/>
                                     </Button>
                                 </div>
                                 <div className='text-center text-sm'>
