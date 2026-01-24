@@ -1,4 +1,4 @@
-import { CommandDialog, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { CommandDialog, CommandInput, CommandItem, CommandList, CommandResponsiveDialog } from "@/components/ui/command"
 import { Command } from "lucide-react";
 import { Dispatch, SetStateAction ,useState} from "react";
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 export const DashBoardCommand=({ open, setOpen }: Props)=>{
      const [search, setSearch] = useState("");
     return (
-        <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
 
             <CommandInput placeholder="Find a meeting or agent..."
                 value={search}
@@ -19,6 +19,6 @@ export const DashBoardCommand=({ open, setOpen }: Props)=>{
         Test
     </CommandItem>
 </CommandList>
-        </CommandDialog>
+        </CommandResponsiveDialog>
     )
 }
