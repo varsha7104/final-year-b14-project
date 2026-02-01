@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {eq} from "drizzle-orm";
+import {eq, getTableColumns,  sql} from "drizzle-orm";
 import { db } from "@/db";
 import { agents } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
@@ -7,7 +7,11 @@ import { agentsInsertSchema } from "../schema";
 //import { TRPCError } from "@trpc/server";
 export const agentsRouter=createTRPCRouter({
     getOne:protectedProcedure.input(z.object({id:z.string()})).query(async({input})=>{
-        const [existingAgents]=await db.select().from(agents).where(eq(agents.id,input.id))
+        const [existingAgents]=await db.select({
+            meetingCount:sql<number>`5`,
+            ...getTableColumns(agents),
+           
+        }).from(agents).where(eq(agents.id,input.id))
         return existingAgents;}),
 
 
@@ -16,10 +20,16 @@ export const agentsRouter=createTRPCRouter({
        //await new Promise((resolve)=>setTimeout(resolve,5000));
 //throw new TRPCError({code:"INTERNAL_SERVER_ERROR",message:"Test error"});
         return data; }),
-    create:protectedProcedure.input(agentsInsertSchema).mutation(async({input,ctx})=>{
-        const [createdAgent]=await db.insert(agents).values({
-            ...input,
-            userId:ctx.auth.user.id,
-        }).returning();
-    }),
+
+         create: protectedProcedure
+        .input(agentsInsertSchema)
+        .mutation(async ({ input, ctx }) => {
+            const [createdAgent] = await db
+                .insert(agents)
+                .values({ ...input, userId: ctx.auth.user.id })
+                .returning();
+
+            return createdAgent;
+        }),
 });
+    

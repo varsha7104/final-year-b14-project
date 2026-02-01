@@ -14,27 +14,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface AgentFormProps {
-    onSuccess: () => void;
-    onCancel: () => void;
+    onSuccess?: () => void;
+    onCancel?: () => void;
     initialValues?: AgentGetOne;};
 export const AgentForm = ({ onSuccess, onCancel, initialValues }: AgentFormProps) => {
     const trpc=useTRPC();
     const router =useRouter();
      const queryClient = useQueryClient();
-        const createAgent = useMutation(
-        trpc.agents.create.mutationOptions({
-            onSuccess: async () => {
-                await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+const createAgent = useMutation(
+    trpc.agents.create.mutationOptions({
+        onSuccess: async ()=>{
+await queryClient.invalidateQueries(
+trpc.agents.getMany.queryOptions(),
+);if(initialValues?.id){
+    queryClient.invalidateQueries(
+        trpc.agents.getOne.queryOptions({id:initialValues.id}),
+    )}
+    onSuccess?.();
+},onError:(error)=>{
+    toast.error(error.message)
+},
 
-                onSuccess?.();
-            },
-            onError: (error) => {
-                toast.message(error.message);
-            },
-        })
-    );
-
-       const form = useForm<z.infer<typeof agentsInsertSchema>>({
+    })
+);       const form = useForm<z.infer<typeof agentsInsertSchema>>({
         resolver: zodResolver(agentsInsertSchema),
         defaultValues: {
             name: initialValues?.name ?? "",
