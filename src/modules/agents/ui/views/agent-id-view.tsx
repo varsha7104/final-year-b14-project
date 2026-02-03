@@ -8,9 +8,10 @@ import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Badge } from "@/components/ui/badge";
 import { VideoIcon } from "lucide-react";
 import { toast } from "sonner";
-//import { useConfirm } from "@/hooks/use-confirm";
+import { useConfirm } from "@/hooks/use-confirm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { UpdateAgentDialog } from "../components/update-agent-dialog";
 //import { UpdateAgentDialog } from "../components/update-agents-dialog";
 
 interface Props {
@@ -26,7 +27,7 @@ export const AgentIdView = ({ agentId }: Props) => {
 
     const { data } = useSuspenseQuery(trpc.agents.getOne.queryOptions({ id: agentId }));
 
-   /* const removeAgent = useMutation(
+    const removeAgent = useMutation(
         trpc.agents.remove.mutationOptions({
             onSuccess: () => {
                 queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
@@ -37,9 +38,9 @@ export const AgentIdView = ({ agentId }: Props) => {
                 toast.error(error.message);
             },
         })
-    );*/
+    );
 
-  /*  const [RemoveConfirmation, confirmRemove] = useConfirm("Are you sure", `The following action will remove ${data.meetingCount} associated meetings`);
+   const [RemoveConfirmation, confirmRemove] = useConfirm("Are you sure", `The following action will remove ${data.meetingCount} associated meetings`);
 
     const handleRemoveAgent = async () => {
         const ok = await confirmRemove();
@@ -48,14 +49,14 @@ export const AgentIdView = ({ agentId }: Props) => {
 
         await removeAgent.mutateAsync({ id: agentId });
     };
-*/
+
     return (
         <>
-      {/*      <RemoveConfirmation />
-            <UpdateAgentDialog open={UpdateAgentDialogOpen} onOpenChange={setUpdateAgentDialogOpen} intialValues={data} />*/}
+            <RemoveConfirmation />
+            <UpdateAgentDialog open={UpdateAgentDialogOpen} onOpenChange={setUpdateAgentDialogOpen} intialValues={data} />
             <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
                 
-               <AgentIdViewHeader agentId={agentId} agentName={data.name} onEdit={()=>{}} onRemove={()=>{}} />
+               <AgentIdViewHeader agentId={agentId} agentName={data.name} onEdit={()=>setUpdateAgentDialogOpen(true)} onRemove={handleRemoveAgent} />
                 <div className="bg-white rounded-lg border">
                     <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
                         <div className="flex items-center gap-x-3">
