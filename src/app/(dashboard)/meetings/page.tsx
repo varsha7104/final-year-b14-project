@@ -14,15 +14,15 @@ import { MeetingsListHeader } from "@/modules/meetings/ui/components/meetings-li
     MeetingsView,
     MeetingsViewError,
     MeetingsViewLoading,
-} from "@/modules/meetings/ui/views/meetings-view";
-import { loadSearchParams } from "@/modules/meetings/params";*/
+} from "@/modules/meetings/ui/views/meetings-view";*/
+import { loadSearchParams } from "@/modules/meetings/params";
 
 interface Props {
     searchParams: Promise<SearchParams>;
 }
 
 const Page = async ({ searchParams }: Props) => {
-  //  const filters = await loadSearchParams(searchParams);
+  const filters = await loadSearchParams(searchParams);
     const queryClient = getQueryClient();
 
     const session = await auth.api.getSession({
@@ -35,7 +35,7 @@ const Page = async ({ searchParams }: Props) => {
 
  void queryClient.prefetchQuery(
         trpc.meetings.getMany.queryOptions({
-           // ...filters,
+         ...filters,
         }),
 
 
