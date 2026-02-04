@@ -12,12 +12,35 @@ import {
 } from "@/constants";
 import { and, count, desc,  ilike } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
+import { meetingsInsertSchema, meetingsUpdateSchema } from "../schema";
 
 //import { TRPCError } from "@trpc/server";
 export const meetingsRouter=createTRPCRouter({
         
 
+       update: protectedProcedure
+              .input(meetingsUpdateSchema)
+              .mutation(async ({ ctx, input }) => {
+                  const [updatedMeeting] = await db
+                      .update(meetings)
+                      .set(input)
+                      .where(
+                          and(
+                              eq(meetings.id, input.id),
+                              eq(meetings.userId, ctx.auth.user.id),
+                          ),
+                      )
+                      .returning();
       
+                  if (!updatedMeeting) {
+                      throw new TRPCError({
+                          code: "NOT_FOUND",
+                          message: "Meeting not found",
+                      });
+                  }
+      
+                  return updatedMeeting;
+              }),
     getOne: protectedProcedure
         .input(z.object({ id: z.string() }))
         .query(async ({ input, ctx }) => {
@@ -93,7 +116,16 @@ export const meetingsRouter=createTRPCRouter({
        //await new Promise((resolve)=>setTimeout(resolve,5000));
 //throw new TRPCError({code:"INTERNAL_SERVER_ERROR",message:"Test error"});
          }),
+         create: protectedProcedure
+        .input(meetingsInsertSchema)
+        .mutation(async ({ input, ctx }) => {
+            const [createdMeeting] = await db
+                .insert(meetings)
+                .values({ ...input, userId: ctx.auth.user.id })
+                .returning();
 
+            return createdMeeting;
+        }),
         
 });
     

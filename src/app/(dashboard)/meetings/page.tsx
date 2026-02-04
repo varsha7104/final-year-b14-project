@@ -9,7 +9,7 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { auth } from "@/lib/auth";
 import { MeetingsView, MeetingsViewError, MeetingsViewLoading } from "@/modules/meetings/ui/views/meetings-view";
 
-//import { MeetingsListHeader } from "@/modules/meetings/ui/components/meetings-list-header";
+import { MeetingsListHeader } from "@/modules/meetings/ui/components/meetings-list-header";
 /*import {
     MeetingsView,
     MeetingsViewError,
@@ -45,8 +45,9 @@ const Page = async ({ searchParams }: Props) => {
      
        
        <>
-        {/*} <MeetingsListHeader />*/}
+        
             <HydrationBoundary state={dehydrate(queryClient)}>
+                <MeetingsListHeader />
                 <Suspense fallback={<MeetingsViewLoading />}>
                     <ErrorBoundary fallback={<MeetingsViewError />}>
                         <MeetingsView />
