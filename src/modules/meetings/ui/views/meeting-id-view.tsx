@@ -13,11 +13,11 @@ import { useConfirm } from "@/hooks/use-confirm";
 //import { UpdateMeetingDialog } from "../components/update-meeting-dialog";
 import { useState } from "react";
 import { UpdateMeetingDialog } from "../components/update-meeting-dialog";
-/*import { UpcomingState } from "../components/upcoming-state";
+import { UpcomingState } from "../components/upcoming-state";
 import { ActiveState } from "../components/active-state";
 import { CancelledState } from "../components/cancelled-state";
 import { ProcessingState } from "../components/processing-state";
-import { CompletedState } from "../components/completed-state";*/
+//import { CompletedState } from "../components/completed-state";
 
 interface Props {
     meetingId: string;
@@ -82,11 +82,10 @@ export const MeetingIdView = ({ meetingId }: Props) => {
                     meetingName={data.name}
                     onEdit={() => setUpdateMeetingDialogOpen(true)}
                     onRemove={handleRemoveMeeting}
-                />{JSON.stringify(data,null,2)}
-                Meeting id view</div>
-            {/*}    {isCancelled && <CancelledState />}
+                />
+                   {isCancelled && <CancelledState />}
                 {isProcessing && <ProcessingState />}
-                {isCompleted && <CompletedState data={data} />}
+              {/*  {isCompleted && <CompletedState data={data} />}*/}
                 {isActive && <ActiveState meetingId={meetingId} />}
                 {isUpcoming && (
                     <UpcomingState
@@ -94,8 +93,8 @@ export const MeetingIdView = ({ meetingId }: Props) => {
                         onCancelMeeting={() => {}}
                         isCancelling={false}
                     />
-                )}*}
-            </div>*/}
+                )}
+            </div>
         </>
     );
 };
