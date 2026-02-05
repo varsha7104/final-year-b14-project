@@ -17,7 +17,28 @@ import { MeetingStatus } from "../types";
 
 //import { TRPCError } from "@trpc/server";
 export const meetingsRouter=createTRPCRouter({
-        
+         remove: protectedProcedure
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            const [removedMeeting] = await db
+                .delete(meetings)
+                .where(
+                    and(
+                        eq(meetings.id, input.id),
+                        eq(meetings.userId, ctx.auth.user.id),
+                    ),
+                )
+                .returning();
+
+            if (!removedMeeting) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Meeting not found",
+                });
+            }
+
+            return removedMeeting;
+        }),
 
        update: protectedProcedure
               .input(meetingsUpdateSchema)
@@ -59,7 +80,7 @@ export const meetingsRouter=createTRPCRouter({
                 .where(
                     and(
                         eq(meetings.id, input.id),
-                     
+                     eq(meetings.userId, ctx.auth.user.id),
                     ),
                 );
 
