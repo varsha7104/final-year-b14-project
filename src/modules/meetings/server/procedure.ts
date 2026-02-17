@@ -32,6 +32,15 @@ export const meetingsRouter=createTRPCRouter({
                         variant: "initials",
                     }),
             },
+            {
+            id: "ai-bot",
+            name: "AI Assistant",
+            role: "admin",
+            image: generateAvatarUri({
+                seed: "AI Assistant",
+                variant: "botttsNeutral",
+            }),
+        },
         ]); const expirationTime = Math.floor(Date.now() / 1000) + 3600;
         const issuedAt = Math.floor(Date.now() / 1000) - 60;
 
@@ -40,8 +49,13 @@ export const meetingsRouter=createTRPCRouter({
             exp: expirationTime,
             validity_in_seconds: issuedAt,
         });
+        const aiToken = streamVideo.generateUserToken({
+        user_id: "ai-bot",
+        exp: expirationTime,
+        validity_in_seconds: issuedAt,
+    });
 
-        return token;
+        return {token,aiToken,};
     }),
          remove: protectedProcedure
         .input(z.object({ id: z.string() }))
@@ -196,6 +210,11 @@ const call = streamVideo.video.call("default", createdMeetings.id);
             await call.create({
                 data: {
                     created_by_id: ctx.auth.user.id,
+                    members: [
+            { user_id: ctx.auth.user.id },
+            { user_id: "ai-bot" }, // 🤖 allow AI to join
+        ],
+           
                     custom: {
                         meetingId: createdMeetings.id,
                         meetingName: createdMeetings.name,
