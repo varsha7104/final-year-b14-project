@@ -43,6 +43,7 @@ The system consists of the following components:
 - Tools: Git, GitHub, Postman
 
 ## Project Structure
+```
 knowledge-aware-ai-agent/
 │── public/
 │── src/
@@ -50,16 +51,9 @@ knowledge-aware-ai-agent/
 │── database/
 │── docs/
 │── README.md
-
-## Installation and Setup
-
-1. Clone the repository
-
-3. Install dependencies
+```
 
 
-
-3. Run the project
 ```
 src
     ├───app
@@ -113,6 +107,15 @@ src
     └───trpc
         └───routers
 ```
+## Installation and Setup
+
+1. Clone the repository
+
+3. Install dependencies
+
+
+
+3. Run the project
 ## Use Cases
 - Educational assistant
 - Business communication tool
