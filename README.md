@@ -7,7 +7,7 @@ This project improves traditional chatbots by using structured knowledge, contex
 
 ## Features
 - Knowledge Integration for accurate responses
-- Natural Language Processing (NLP)
+- Natural Language Processing (NLP) 
 - Context-aware conversation handling
 - Real-time response generation
 - Secure communication
